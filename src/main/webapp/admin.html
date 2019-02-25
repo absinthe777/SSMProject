@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>OneTrueGod</title>
+    <link rel="stylesheet" href="js/node_modules/layui-src/dist/css/layui.css">
+    <link rel="stylesheet" href="other/style.css">
+    <script src="js/node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="js/node_modules/layui-src/dist/layui.all.js"></script>
+    <script type="text/javascript" src="other/spig.js" charset="gb2312"></script>
+    <div id="spig" class="spig">
+        <div id="message">加载中……</div>
+        <div id="mumu" class="mumu"></div>
+    </div>
+    <script>
+        var isindex=true;
+        var visitor=sessionStorage.getItem("uname");
+        var temp=0;
+        $(function () {
+            var uname = sessionStorage.getItem("uname");
+            var user_id = sessionStorage.getItem("user_id");
+            var photo = sessionStorage.getItem("photo");
+            $("#userPhoto").attr("src",photo);//这句话是给img标记src属性赋值
+            $("#uname").html(uname);
+            if (temp == 0)
+                $("#mainContent").load("fileManager.html");
+        });
+        function fileManager(fileType,isShare){
+            sessionStorage.setItem("fileType",fileType);
+            sessionStorage.setItem("isShare",isShare);
+            $("#mainContent").load("fileManager.html");
+        }
+        function personCenter(){
+            $("#mainContent").load("personCenter.html");
+        }
+        function redirectUpdateUpwd() {
+            $("#mainContent").load("updateUpwd.html");
+        }
+        function exit() {
+            layer.confirm("确定要退出系统么？",
+                {title:"确认提示",
+                    btn:['确定','取消']},
+                function (index) {
+                    sessionStorage.clear(); //清除session缓存
+                    window.location.href = "index.html";
+                }
+            );
+        }
+    </script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">OneTrueGod网络云盘</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="javascript:fileManager(null,null)">文件管理</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">消息管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img id="userPhoto" src="myphoto/myphoto.jpg" class="layui-nav-img">
+                    <span id="uname"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javaScript:personCenter()">完善个人信息</a></dd>
+                    <dd><a href="javaScript:redirectUpdateUpwd()">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javaScript:exit()">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="#"><span class="layui-icon layui-icon-password"></span>私有文件</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:fileManager('isVideo',0);"><span
+                                class="layui-icon layui-icon-video"></span> 视频</a></dd>
+                        <dd><a href="javascript:fileManager('isAudio',0);"><span
+                                class="layui-icon layui-icon-headset"></span> 音乐</a></dd>
+                        <dd><a href="javascript:fileManager('isPicture',0);"><span
+                                class="layui-icon layui-icon-picture"></span> 照片</a></dd>
+                        <dd><a href="javascript:fileManager('isDocument',0);"><span
+                                class="layui-icon layui-icon-file"></span> 文档</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="#"><span class="layui-icon layui-icon-share"></span>共享文件</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:fileManager('isVideo',1);"><span
+                                class="layui-icon layui-icon-video"></span> 视频</a></dd>
+                        <dd><a href="javascript:fileManager('isAudio',1);"><span
+                                class="layui-icon layui-icon-headset"></span> 音乐</a></dd>
+                        <dd><a href="javascript:fileManager('isPicture',1);"><span
+                                class="layui-icon layui-icon-picture"></span> 照片</a></dd>
+                        <dd><a href="javascript:fileManager('isDocument',1);"><span
+                                class="layui-icon layui-icon-file"></span> 文档</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="#"><span class="layui-icon layui-icon-util"></span> 个人资源统计</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart-screen"></span> 报表打印</a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div id="mainContent" style="padding: 15px;">内容主体区域</div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        &copy OneTrueGod 2018-2019全职服务
+    </div>
+</div>
+</body>
+</html>

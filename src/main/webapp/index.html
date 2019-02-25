@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--响应式布局-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="js/node_modules/layui-src/dist/css/layui.css">
+    <title>登录</title>
+    <script>
+        function login() {
+            var uname=$("#uname").val();
+            var upwd=$("#upwd").val();
+            var input_Code=$("#vcode").val();
+            if (uname.length==0){
+                layer.tips("抱歉，用户名不能为空!","#uname",{
+                    tips:[2,"#000000"],
+                    time:2000
+                });
+                return;
+            }
+            if (upwd.length==0){
+                layer.tips("抱歉，密码不能为空!","#upwd",{
+                    tips:[2,"#000000"],
+                    time:2000
+                });
+                return;
+            }
+            if (upwd.length<6 || upwd.length>10) {
+                layer.tips("请输入6-10位密码", "#upwd", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            if(input_Code.toLowerCase()!=verVal.toLowerCase()){
+                layer.tips('验证码输入错误','#vcode',{
+                    tips:[3,"#000000"],
+                    time:2000
+                });
+                return;
+            }
+            $.ajax({
+                url:"user/login.do",
+                method:"post",
+                data:$("#loginform").serialize(),//序列化
+                beforeSend:function(){
+                    index=layer.load(3,{
+                        shade:[0.5,'#000']
+                    });
+                },
+                complete:function(){
+                    layer.close(index);
+                },
+                success:function (result) {
+                    var jsonObj=  JSON.parse(result);
+                    if(jsonObj.loginmsg != 0){
+                        //记住密码复选框
+                        if($("#repwd").is(":checked")){//使用jquery获取复选框状态
+                            sessionStorage.setItem("uname", uname);
+                            sessionStorage.setItem("upwd", upwd);
+                        }else
+                        {
+                            sessionStorage.clear();
+                        }
+
+                        if (jsonObj.status == 0) {
+                            layer.msg("用户未激活，无法登录！",{
+                                time:2000
+                            });
+                        }else{
+                            sessionStorage.setItem("uname",uname);
+                            sessionStorage.setItem("user_id",jsonObj.userid);
+                            sessionStorage.setItem("photo",jsonObj.photo);
+                            window.location.href="admin.html";
+                        }
+                    }else
+                    {
+                        layer.msg("登录失败");
+                    }
+                },
+                error:function () {
+                    layer.alert("服务器连接失败"),{icon:6};
+                }
+            });
+        }
+        function register(){
+            var uname = $("#uname1").val();
+            var upwd = $("#upwd1").val();
+            var rupwd = $("#rupwd1").val();
+            var email=$("#email").val();
+            var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            if (uname.length == 0) {
+                layer.tips("用户名不能为空!", "#uname1", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            if (upwd.length == 0) {
+                layer.tips("密码不能为空!", "#upwd1", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            if (upwd.length < 6 || upwd.length > 10) {
+                layer.tips("请输入6~10位密码!", "#upwd1", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            if (rupwd.length == 0) {
+                layer.tips("确认密码不能为空!", "#rupwd1", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            if (upwd!=rupwd) {
+                layer.tips("密码输入不一致!", "#rupwd1", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            if(!pattern.test(email)){
+                layer.tips("Email输入不正确!", "#email", {
+                    tips: [2, "#000000"],
+                    time: 2000
+                });
+                return;
+            }
+            $.ajax({
+                url:"user/register.do",
+                method:"post",
+                data:$("#registerform").serialize(),//序列化
+                success:function (result) {
+                    if(result==1){
+                        window.location.href="index.html";
+                    }else
+                    {
+                        layer.msg("注册失败",{
+                            time:2000
+                        });
+                    }
+                },
+                error:function () {
+                    layer.alert("服务器连接失败"),{icon:6};
+                    layer.close(index);
+                }
+            });
+        }
+    </script>
+</head>
+<body class="layui-bg-gray">
+<div id="loginDiv" class="layui-fluid" style="width:40%" align="center">
+    <div class="layui-card">
+        <div class="layui-card-header"><h2>云盘</h2></div>
+        <div class="layui-card-body">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">登录</li>
+                    <li>注册</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <!--用户登录-->
+                    <div class="layui-tab-item layui-show">
+                        <form  id="loginform" class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-block">
+                                    <input id="uname" name="uname" type="text" placeholder="请输入用户名" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-block">
+                                    <input id="upwd" name="upwd" type="password" placeholder="请输入密码" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">验证码</label>
+                                <div class="layui-input-inline">
+                                    <input id="vcode" type="text" placeholder="请输入验证码" class="layui-input">
+                                </div>
+                                <a href="javascript:resetCode()">
+                                    <canvas width="100" height="37" id="verifyCanvas"></canvas>
+                                    <img id="img_vcode" alt="验证码">看不清，点击更换
+                                </a>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input id="repwd" type="checkbox" name="remember" title="记住密码" >
+                                    <a href="">忘记密码,找回？</a>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" align="center">
+                                <a href="javascript:login()" class="layui-btn layui-btn-fluid" style="width: 45%">登录</a>
+                                <a href="javascript:loginform.reset()" class="layui-btn layui-btn-fluid" style="width: 45%">重置</a>
+                            </div>
+                        </form>
+                    </div>
+                    <!--用户注册-->
+                    <div class="layui-tab-item">
+                        <form  id="registerform" class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-block">
+                                    <input id="uname1" name="uname" type="text" placeholder="请输入用户名" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-block">
+                                    <input id="upwd1" name="upwd" type="password" placeholder="请输入密码" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">确认密码</label>
+                                <div class="layui-input-block">
+                                    <input id="rupwd1" type="password" placeholder="请输入密码" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Email</label>
+                                <div class="layui-input-block">
+                                    <input id="email" name="email" type="email" placeholder="请输入邮箱" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" align="center">
+                                <a href="javascript:register()" class="layui-btn layui-btn-fluid" style="width: 45%">注册</a>
+                                <a href="javascript:registerform.reset()" class="layui-btn layui-btn-fluid" style="width: 45%">重置</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="other/vcode.js"></script>
+<script type="text/javascript" src="js/node_modules/layui-src/dist/layui.all.js"></script>
+<script type="text/javascript" src="js/node_modules/jquery/dist/jquery.js"></script>
+<script color="0,0,255" pointColor="0,0,255" count="300">
+    !
+        function() {
+            function n(n, e, t) {
+                return n.getAttribute(e) || t
+            }
+            function e(n) {
+                return document.getElementsByTagName(n)
+            }
+            function t() {
+                var t = e("script"),
+                    o = t.length,
+                    i = t[o - 1];
+                return {
+                    l: o,
+                    z: n(i, "zIndex", -1),
+                    o: n(i, "opacity", .5),
+                    c: n(i, "color", "0,0,0"),
+                    n: n(i, "count", 99)
+                }
+            }
+            function o() {
+                a = m.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                    c = m.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+            }
+            function i() {
+                r.clearRect(0, 0, a, c);
+                var n, e, t, o, m, l;
+                s.forEach(function(i, x) {
+                    for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 : 1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1, 1), e = x + 1; e < u.length; e++) n = u[e],
+                    null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l = o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o, i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t / 2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y), r.lineTo(n.x, n.y), r.stroke()))
+                }),
+                    x(i)
+            }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+                    function(n) {
+                        window.setTimeout(n, 1e3 / 45)
+                    },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+                m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z + ";opacity:" + d.o,
+                e("body")[0].appendChild(m),
+                o(),
+                window.onresize = o,
+                window.onmousemove = function(n) {
+                    n = n || window.event,
+                        y.x = n.clientX,
+                        y.y = n.clientY
+                },
+                window.onmouseout = function() {
+                    y.x = null,
+                        y.y = null
+                };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                s.push({
+                    x: h,
+                    y: g,
+                    xa: v,
+                    ya: p,
+                    max: 6e3
+                })
+            }
+            u = s.concat([y]),
+                setTimeout(function() {
+                        i()
+                    },
+                    100)
+        } ();
+
+    // 主页面居中设置
+    $(function () {
+        var height = document.body.scrollHeight;
+        var logo_wrap = $("#loginDiv").get(0);
+        var margin_top = (height-150) / 2;
+        logo_wrap.style.marginTop = margin_top + "px";
+    });
+</script>
+</body>
+</html>

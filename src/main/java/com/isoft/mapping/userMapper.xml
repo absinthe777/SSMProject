@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoft.mapping.User">
+    <select id="login" parameterType="map" resultType="map">
+        select * from user_info where username=#{uname} and password=#{upwd}
+    </select>
+    <insert id="register" parameterType="map">
+    insert into user_info(username,`password`,email,register_time,status)
+    values(#{uname},#{upwd},#{email},now(),0);
+    update user_info set `status`=1 where username=#{uname};
+    </insert>
+    <select id="validateOldPwd" parameterType="map" resultType="map">
+        select * from user_info where user_id=#{userid} and `password`=#{oldpwd}
+    </select>
+    <update id="updateOldPwd" parameterType="map">
+        update user_info set `password`=#{newpwd} where user_id=#{userid}
+    </update>
+    <update id="updateUserPhoto" parameterType="map">
+        update user_info set photo=#{photopath} where user_id=#{userid}
+    </update>
+    <select id="findUserInfoById" parameterType="string" resultType="map">
+        select a.user_id,a.username,b.runame,b.gender,b.birthday,b.address,b.remark,b.telephone,a.photo,a.email from user_info a inner join user_detail_inf b on a.user_id=b.user_id where a.user_id=#{user_id}
+    </select>
+    <update id="updateUserInfo" parameterType="com.isoft.pojo.UserInfo">
+        update user_detail_inf set runame=#{runame},gender=#{gender},birthday=#{birthday},address=#{address},telephone=#{telephone},remark=#{remark} where user_id=#{user_id}
+    </update>
+</mapper>
