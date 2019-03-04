@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @Scope("prototype")
@@ -21,6 +20,98 @@ import java.util.Map;
 public class UserAction {
     @Autowired
     IUserService userServiceImpl;
+
+    @RequestMapping(value = "/PieAnalysis.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Map PieAnalysis(){
+        List<Map> list  = userServiceImpl.PieAnalysis();
+        List<String> statusList=new ArrayList<String>();
+        List<Integer> countList=new ArrayList<Integer>();
+        for (Map map:list){
+            statusList.add(map.get("status").toString());
+            countList.add(Integer.parseInt(map.get("count").toString()));
+        }
+        Map map=new HashMap();
+        map.put("status",statusList);
+        map.put("count",countList);
+        return map;
+    }
+
+    @RequestMapping("/dirAnalysis.do")
+    @ResponseBody
+    public Map dirAnalysis(String user_id) {
+        List<Map> maps = userServiceImpl.dirAnalysis(user_id);
+        List newList = new ArrayList();
+        Set set = new HashSet();
+        for (Map list : maps) {
+            set.add(list.get("dir_name"));
+        }
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()) {
+            Map map=new HashMap();
+            map.put("name",iterator.next());
+            List l=new ArrayList();
+            for (Map m: maps) {
+                if(map.containsValue(m.get("dir_name"))){
+                    Map mm=new HashMap();
+                    mm.put("name",m.get("name"));
+                    mm.put("value",0);
+                    l.add(mm);
+                }}
+
+            map.put("children",l);
+            newList.add(map);
+        }
+        Map map1=new HashMap();
+        map1.put("name","目录结构");
+        map1.put("children",newList);
+        return map1;
+    }
+
+    @RequestMapping(value = "/LineAnalysis.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Map LineAnalysis(){
+        List<Map> list  = userServiceImpl.LineAnalysis();
+        List<String> nameList=new ArrayList<String>();
+        List<Integer> downloadCountList=new ArrayList<Integer>();
+        for (Map map:list){
+            nameList.add(map.get("file_name").toString());
+            downloadCountList.add(Integer.parseInt(map.get("downloadCount").toString()));
+        }
+        Map map=new HashMap();
+        map.put("file_name",nameList);
+        map.put("downloadCount",downloadCountList);
+        return map;
+    }
+
+    @RequestMapping(value = "/BarAnalysis.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Map BarAnalysis(){
+        List<Map> list  = userServiceImpl.BarAnalysis();
+        List<String> nameList=new ArrayList<String>();
+        List<Integer> sizeList=new ArrayList<Integer>();
+        for (Map map:list){
+            nameList.add(map.get("file_name").toString());
+            sizeList.add(Integer.parseInt(map.get("file_size").toString()));
+        }
+        Map map=new HashMap();
+        map.put("file_name",nameList);
+        map.put("file_size",sizeList);
+        return map;
+    }
+
+    @RequestMapping(value = "/RadarAnalysis.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Map RadarAnalysis(){
+        List<Map> list  = userServiceImpl.RadarAnalysis();
+        List<String> typeList=new ArrayList<String>();
+        for (Map map:list){
+            typeList.add(map.get("file_type").toString());
+        }
+        Map map=new HashMap();
+        map.put("file_type",typeList);
+        return map;
+    }
 
     @RequestMapping(value = "/findUserInfoById.do",method = RequestMethod.GET)
     @ResponseBody

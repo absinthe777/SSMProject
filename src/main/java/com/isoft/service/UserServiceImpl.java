@@ -5,6 +5,7 @@ import com.isoft.pojo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 @Service
 public class UserServiceImpl implements IUserService {
@@ -49,5 +50,35 @@ public class UserServiceImpl implements IUserService {
     public int updateUserInfo(UserInfo userinfo) {
         int i = userDAO.updateUserInfo(userinfo);
         return i;
+    }
+
+    @Override
+    public List<Map> PieAnalysis() {
+        List<Map> maps = userDAO.PieAnalysis();
+        return maps;
+    }
+
+    @Override
+    public List<Map> dirAnalysis(String user_id) {
+        List<Map> allDirList = userDAO.dirAnalysis(user_id);
+        return allDirList;
+    }
+
+    @Override
+    public List<Map> LineAnalysis() {
+        List<Map> list = userDAO.LineAnalysis();
+        return list;
+    }
+
+    @Override
+    public List<Map> BarAnalysis() {
+        List<Map> list = userDAO.BarAnalysis();
+        return list;
+    }
+
+    @Override
+    public List<Map> RadarAnalysis() {
+        List<Map> list = userDAO.RadarAnalysis();
+        return list;
     }
 }

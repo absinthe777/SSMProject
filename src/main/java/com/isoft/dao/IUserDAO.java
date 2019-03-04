@@ -2,14 +2,20 @@ package com.isoft.dao;
 
 import com.isoft.pojo.UserInfo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IUserDAO {
     Map<String,Object> login(String uname,String upwd);
     int register(Map<String,Object> obj);
-    public int validateOldPwd(int userid, String oldpwd);
-    public int updateOldPwd(int userid, String newpwd);
-    public int updateUserPhoto(String userid,String photoPath);
+    int validateOldPwd(int userid, String oldpwd);
+    int updateOldPwd(int userid, String newpwd);
+    int updateUserPhoto(String userid,String photoPath);
     Map findUserInfoById(String user_id);
     int updateUserInfo(UserInfo userinfo);
+    List<Map> PieAnalysis();
+    List<Map> dirAnalysis(String user_id);
+    List<Map> LineAnalysis();
+    List<Map> BarAnalysis();
+    List<Map> RadarAnalysis();
 }

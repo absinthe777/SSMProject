@@ -3,6 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.isoft.mapping.User">
+    <select id="userStatusAnalysis" resultType="map">
+        select CASE `status` WHEN 1 THEN "激活" ELSE "未激活" END AS `status`, count(*) as count from user_info GROUP BY `status`
+    </select>
+    <select id="dirAnalysis" parameterType="string" resultType="map">
+        select a.dir_name, b.dir_name as `name` from dir_inf a
+        INNER JOIN dir_inf b on a.dir_id=b.parent_dir where a.dir_user_id=#{user_id}
+    </select>
+    <select id="LineAnalysis" resultType="map">
+        SELECT file_name,downloadCount FROM file_inf
+    </select>
+    <select id="BarAnalysis" resultType="map">
+        SELECT file_name,file_size FROM file_inf
+    </select>
+    <select id="RadarAnalysis" resultType="map">
+        SELECT file_type FROM file_inf
+    </select>
     <select id="login" parameterType="map" resultType="map">
         select * from user_info where username=#{uname} and password=#{upwd}
     </select>

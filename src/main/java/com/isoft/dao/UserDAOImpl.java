@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @Repository("userDAO")
 public class UserDAOImpl implements IUserDAO {
@@ -89,5 +90,65 @@ public class UserDAOImpl implements IUserDAO {
             sqlSession.rollback();
         }
         return 0;
+    }
+
+    @Override
+    public List<Map> PieAnalysis() {
+        try {
+            SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+            String sql = "com.isoft.mapping.User.userStatusAnalysis";
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map> dirAnalysis(String user_id) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql="com.isoft.mapping.User.dirAnalysis";
+        List<Map> objects = sqlSession.selectList(sql, user_id);
+        return objects;
+    }
+
+    @Override
+    public List<Map> LineAnalysis() {
+        try {
+            SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+            String sql = "com.isoft.mapping.User.LineAnalysis";
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map> BarAnalysis() {
+        try {
+            SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+            String sql = "com.isoft.mapping.User.BarAnalysis";
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map> RadarAnalysis() {
+        try {
+            SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+            String sql = "com.isoft.mapping.User.RadarAnalysis";
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

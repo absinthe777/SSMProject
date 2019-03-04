@@ -124,7 +124,6 @@
                         {
                             field: "file_upload_time", title: "上传时间",
                             templet: function (row) {
-
                                 return new Date(row.file_upload_time).toLocaleString();
                             }
                         },
@@ -150,7 +149,7 @@
                             filed: "file_id", title: "操作", width: 100,
                             templet: function (row) {
                                 var dele="<a href='javascript:deleteFileInfoById(" + row.file_id + ")' title='删除' class='layui-badge' ><span class='layui-icon layui-icon-delete'></span></a>";
-                                var download="<a href='file/downloadFile.do?filePath=" + row.file_path +"&fileName="+row.file_name+"&file_id=" +row.file_id+"' title='下载' class='layui-badge layui-bg-gray' ><span class='layui-icon layui-icon-download-circle'></span></a>";
+                                var download="<a href='file/downloadFile.do?filePath=" + row.file_path +"&fileName="+row.file_name+"&file_id=" +row.file_id+"' title='下载' class='layui-badge layui-bg-green' ><span class='layui-icon layui-icon-download-circle'></span></a>";
                                 return dele+" "+download;
                             }
 
@@ -158,7 +157,6 @@
                     ]]
                 });
                 layui.table.on("toolbar(filetable)", function (rs) {
-
                     var event = rs.event;
                     if (event == "add") {
                         layer.msg(event);
@@ -200,7 +198,6 @@
                         }
                     }
                 });
-
             });
         }
 
@@ -225,10 +222,7 @@
                 }
             });
         }
-
-
     </script>
-
 
 </head>
 <body>
@@ -241,7 +235,6 @@
     <button class="layui-btn" lay-event="delete">
         <i class="layui-icon">&#xe640;</i> 删除
     </button>
-
 </script>
 <table id="file_manager_table" lay-filter="filetable"></table>
 </body>

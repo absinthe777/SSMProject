@@ -47,6 +47,22 @@
                 }
             );
         }
+        function showAnalysis() {
+            $("#mainContent").load("analysis.html");
+        }
+        function showUploadDiv() {
+            layer.open({
+                type: 2,
+                title: "上传文件",
+                area: ['800px', '400px'],
+                content: "uploadSelectFile.html",
+                btn: ["关闭"],
+                btn1: function () {
+                    layer.closeAll();
+                }
+            });
+
+        }
     </script>
 </head>
 <body class="layui-layout-body">
@@ -57,12 +73,15 @@
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="javascript:fileManager(null,null)">文件管理</a></li>
             <li class="layui-nav-item">
-                <a href="javascript:;">消息管理</a>
-                <dl class="layui-nav-child">
+                <a href="javascript:showUploadDiv()">上传文件</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">创建文件夹</a>
+                <!--<dl class="layui-nav-child">
                     <dd><a href="">邮件管理</a></dd>
                     <dd><a href="">消息管理</a></dd>
                     <dd><a href="">授权管理</a></dd>
-                </dl>
+                </dl>-->
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">
@@ -113,7 +132,7 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="#"><span class="layui-icon layui-icon-util"></span> 个人资源统计</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
+                        <dd><a href="javaScript:showAnalysis()"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
                         <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart-screen"></span> 报表打印</a>
                         </dd>
                     </dl>

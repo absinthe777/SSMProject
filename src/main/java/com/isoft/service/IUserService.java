@@ -2,6 +2,7 @@ package com.isoft.service;
 
 import com.isoft.pojo.UserInfo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IUserService {
@@ -12,4 +13,9 @@ public interface IUserService {
     int updateUserPhoto(String userid,String photoPath);
     Map findUserInfoById(String user_id);
     int updateUserInfo(UserInfo userinfo);
+    List<Map> PieAnalysis();
+    List<Map> dirAnalysis(String user_id);
+    List<Map> LineAnalysis();
+    List<Map> BarAnalysis();
+    List<Map> RadarAnalysis();
 }
