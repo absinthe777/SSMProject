@@ -1,5 +1,6 @@
 package com.isoft.action;
 
+import com.isoft.service.IDirService;
 import com.isoft.service.IFileService;
 import com.isoft.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +29,73 @@ public class UploadAction {
     IUserService userServiceImpl;
     @Autowired
     IFileService fileServiceImpl;
+    @Autowired
+    IDirService iDirService;
+
+    @RequestMapping(value = "/uploadSelectFile.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Map uploadSelectFile(HttpSession session,@RequestParam("file") MultipartFile file, String file_type, String user_id, String file_dir_id) {
+        String realPath = session.getServletContext().getRealPath("/WEB-INF/resourses");
+        Map<String,Object> filePath = iDirService.findFilePathByDirId(file_dir_id);
+        File fileDir=new File(realPath+"/"+filePath.get("filepath"));
+        if(!fileDir.exists()){
+            fileDir.mkdirs();//创建文件夹
+        }
+        String fileName = file.getOriginalFilename();//获得上传文件的文件名称
+        File newFile = new File(realPath+filePath.get("filepath"), fileName);
+        Map map = new HashMap();
+        try {
+            file.transferTo(newFile);//实现文件上传的方法
+            //完成数据表信息添加
+            Map fileInfomap=new HashMap();
+            fileInfomap.put("file_name",file.getOriginalFilename());
+            fileInfomap.put("file_size",file.getSize());
+            fileInfomap.put("file_type",file_type);
+            fileInfomap.put("file_dir_id",file_dir_id);
+            fileInfomap.put("user_id",user_id);
+            int i = fileServiceImpl.insertUploadFileInfo(fileInfomap);
+            map.put("code", 0);
+            if(i>0)
+                map.put("dt","1");
+            else
+                map.put("dt",0);//dt表示插入数据表状态
+        } catch (Exception e) {
+            map.put("code", 1);
+            e.printStackTrace();
+        }
+        return map;
+    }
     @RequestMapping(value = "/downloadFile.do",method = RequestMethod.GET)
     @ResponseBody
-    public String downloadFile(String filePath, String fileName, int file_id, HttpServletRequest request, HttpServletResponse response){
-        System.out.println(filePath+"/"+fileName);
-        String realPath = request.getSession().getServletContext().getRealPath("WEB-INF/resources/")+filePath+"/"+fileName;
+    public int downloadFile_1(int file_id, String filePath, String fileName, HttpServletRequest request, HttpServletResponse response) {
+        System.out.println(filePath + "/" + fileName);
+        String realPath = request.getSession().getServletContext().getRealPath("WEB-INF/resourses") +
+                filePath + "/" + fileName;
         System.out.println(realPath);
         try {
-            File file=new File(realPath);
+            File file = new File(realPath);
             response.setContentType("application/x-msdownload;");
-            response.setHeader("Content-disposition","attachment;filename="+new String(fileName.getBytes("utf-8"),"ISO8859-1"));
-            response.setHeader("Content-Length",String.valueOf(file.length()));
-            BufferedInputStream bis=new BufferedInputStream(new FileInputStream(file));
-            BufferedOutputStream bos=new BufferedOutputStream(response.getOutputStream());
-            byte []size=new byte[1024];
-            int length=0;
-            while ((length=bis.read(size))!=-1){
-                bos.write(size,0,length);
+            response.setHeader("Content-disposition", "attachment; filename=" +
+                    new String(fileName.getBytes("utf-8"), "ISO8859-1"));
+            response.setHeader("Content-Length", String.valueOf(file.length()));
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+            BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+            byte[] size = new byte[1024];
+            int length = 0;
+            while ((length = bis.read(size)) != -1) {
+                bos.write(size, 0, length);
             }
             bos.flush();
             bos.close();
-            bos.close();
+            bis.close();
             int i = fileServiceImpl.updateDownloadCount(file_id);
-        }catch (Exception e){
+            System.out.println("更新成功");
+            return i;
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     @RequestMapping(value = "/uploadPersonPhoto.do",method = RequestMethod.POST)

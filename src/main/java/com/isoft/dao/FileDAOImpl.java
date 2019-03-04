@@ -70,4 +70,13 @@ public class FileDAOImpl implements IFileDAO {
         int update = sqlSession.update(sql,file_id);
         return update;
     }
+
+    @Override
+    public int insertUploadFileInfo(Map map) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.File.insertUploadFileInfo";
+        int update = sqlSession.insert(sql,map);
+        sqlSession.commit();
+        return update;
+    }
 }

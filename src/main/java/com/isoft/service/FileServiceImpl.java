@@ -35,4 +35,9 @@ public class FileServiceImpl implements IFileService {
     public int updateDownloadCount(int file_id) {
         return fileDAOImpl.updateDownloadCount(file_id);
     }
+
+    @Override
+    public int insertUploadFileInfo(Map map) {
+        return fileDAOImpl.insertUploadFileInfo(map);
+    }
 }

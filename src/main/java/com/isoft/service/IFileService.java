@@ -12,5 +12,6 @@ public interface IFileService {
 
     int updateFileStatus(Map map);
     public int updateDownloadCount(int file_id);
+    int insertUploadFileInfo(Map map);
 
 }

@@ -72,6 +72,11 @@
                             sessionStorage.setItem("user_id",jsonObj.userid);
                             sessionStorage.setItem("photo",jsonObj.photo);
                             window.location.href="admin.html";
+                            if (jsonObj.username == "admin") {
+                                alert("请跳转到管理页面！");
+                            } else {
+                                // window.location.href = "admin.html";
+                            }
                         }
                     }else
                     {
