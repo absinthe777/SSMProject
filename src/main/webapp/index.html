@@ -71,11 +71,10 @@
                             sessionStorage.setItem("uname",uname);
                             sessionStorage.setItem("user_id",jsonObj.userid);
                             sessionStorage.setItem("photo",jsonObj.photo);
-                            window.location.href="admin.html";
                             if (jsonObj.username == "admin") {
-                                alert("请跳转到管理页面！");
+                                window.location.href="admin1.html";
                             } else {
-                                // window.location.href = "admin.html";
+                                window.location.href = "admin.html";
                             }
                         }
                     }else
@@ -197,7 +196,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-input-block">
                                     <input id="repwd" type="checkbox" name="remember" title="记住密码" >
-                                    <a href="">忘记密码,找回？</a>
+                                    <a href="user/findUserPwd.do">忘记密码,找回？</a>
                                 </div>
                             </div>
 
