@@ -21,7 +21,7 @@ public class FileAction {
     @RequestMapping(value = "findUserFile.do", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> findUserFile(int file_upload_user, String fileType, String isShare, int page, int limit) {//根据用户信息查询
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("user_id", file_upload_user);
         map.put("fileType", fileType);
         map.put("isShare", isShare);
@@ -30,10 +30,10 @@ public class FileAction {
         List<Map<String, Object>> maps = fileServiceImpl.fileUserFile(map);
         int count = Integer.parseInt(maps.get(maps.size() - 1).get("count").toString());
         maps.remove(maps.size() - 1);
-        Map map1 = new HashMap();
+        Map<String, Object> map1 = new HashMap<>();
         map1.put("count", count);
         map1.put("data", maps);
-        if (maps != null)
+        if (maps.size() > 0)
             map1.put("msg", "查询成功");
         else
             map1.put("msg", "还没有上传文件");

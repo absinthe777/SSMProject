@@ -1,16 +1,22 @@
 package com.isoft.action;
 
-import com.alibaba.fastjson.JSON;
 import com.isoft.pojo.UserInfo;
 import com.isoft.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -18,6 +24,12 @@ import java.util.*;
 @Scope("prototype")
 @RequestMapping("/user")
 public class UserAction {
+    @Value("${smtp}")
+    String smtp;
+    @Value("${from}")
+    String from;
+    @Value("${authCode}")
+    String authCode;
     @Autowired
     IUserService userServiceImpl;
 
@@ -159,7 +171,26 @@ public class UserAction {
         }
     }
 
-    @RequestMapping(value = "/register.do",method = RequestMethod.POST)
+    @RequestMapping(value = "/findUserPwd.do")
+    @ResponseBody
+    public  String findUserPwd(HttpServletRequest request,String uname, String email) throws MessagingException {
+        JavaMailSenderImpl javaMailSender=new JavaMailSenderImpl();
+        javaMailSender.setHost(smtp);
+        javaMailSender.setUsername(from);
+        javaMailSender.setPassword(authCode);   //授权码
+        MimeMessage mimeMessage=javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true,"utf-8");
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setFrom(from);
+        mimeMessage.setSubject("找回密码邮件");
+        String hrefString=request.getScheme()+"://"+request.getServerName()+":"+request.getLocalPort()
+                +"/"+request.getServletContext().getContextPath()+"/user/getUserPwd.do?uname"+uname;
+        mimeMessage.setText("单击下面链接修改密码："+hrefString);
+        javaMailSender.send(mimeMessage);
+        return "ok";
+    }
+
+        @RequestMapping(value = "/register.do",method = RequestMethod.POST)
     @ResponseBody
     public int register(String uname, String upwd, String email){
         Map<String, Object> map = new HashMap<>();
