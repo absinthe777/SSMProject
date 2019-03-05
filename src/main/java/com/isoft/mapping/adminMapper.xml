@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--Dynamic SQL-->
+<mapper namespace="com.isoft.mapping.File">
+    <!--Get all Users-->
+    <select id="findAllUser" resultType="map">
+        select * from user_info;
+    </select>
+    <!--Delete a single user-->
+    <delete id="deleteUserById" parameterType="string">
+        delete from user_info where user_id = #{user_id};
+    </delete>
+    <!--Active all users-->
+    <update id="activeAllUser">
+        update user_info set status = 1;
+    </update>
+    <!--Active a single user-->
+    <update id="activeUserById" parameterType="string">
+        update user_info set status = 1 where user_id = #{user_id}
+    </update>
+    <!--Insert one user-->
+    <insert id="insertOneUser" parameterType="map">
+        insert into user_info(username, password, email, register_time, status, photo)
+          values(#{username}, 111111, null, #{register_time}, 0, null);
+    </insert>
+</mapper>
