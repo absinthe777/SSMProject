@@ -17,24 +17,26 @@ public class UserDAOImpl implements IUserDAO {
     public Map<String, Object> login(String uname, String upwd) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.login";
-        Map<String, Object> map = new HashMap<>();
+        Map map = new HashMap();
         map.put("uname",uname);
         map.put("upwd",upwd);
-        return sqlSession.selectOne(sql,map);
+        Map<String, Object> o = sqlSession.selectOne(sql,map);
+        return o;
     }
 
     @Override
     public int register(Map<String, Object> obj) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.register";
-        return sqlSession.insert(sql, obj);
+        int insert = sqlSession.insert(sql, obj);
+        return insert;
     }
 
     @Override
     public int validateOldPwd(int userid, String oldpwd) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.validateOldPwd";
-        Map<String, Object> map = new HashMap<>();
+        Map map = new HashMap();
         map.put("userid",userid);
         map.put("oldpwd",oldpwd);
         Map<String, Object> o = sqlSession.selectOne(sql,map);
@@ -48,17 +50,18 @@ public class UserDAOImpl implements IUserDAO {
     public int updateOldPwd(int userid, String newpwd) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.updateOldPwd";
-        Map<String, Object> map = new HashMap<>();
+        Map map = new HashMap();
         map.put("userid",userid);
         map.put("newpwd",newpwd);
-        return sqlSession.update(sql,map);
+        int update = sqlSession.update(sql,map);
+        return update;
     }
 
     @Override
     public int updateUserPhoto(String userid, String photoPath) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.updateUserPhoto";
-        Map<String, Object> map = new HashMap<>();
+        Map map = new HashMap();
         map.put("userid",userid);
         map.put("photopath",photoPath);
         int update = sqlSession.update(sql,map);
@@ -70,7 +73,8 @@ public class UserDAOImpl implements IUserDAO {
     public Map findUserInfoById(String user_id) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.findUserInfoById";
-        return sqlSession.<Map<String, Object>>selectOne(sql, user_id);
+        Map<String,Object> o = sqlSession.selectOne(sql, user_id);
+        return o;
     }
 
     @Override
@@ -93,7 +97,8 @@ public class UserDAOImpl implements IUserDAO {
         try {
             SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
             String sql = "com.isoft.mapping.User.userStatusAnalysis";
-            return sqlSession.selectList(sql);
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,7 +109,8 @@ public class UserDAOImpl implements IUserDAO {
     public List<Map> dirAnalysis(String user_id) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.dirAnalysis";
-        return sqlSession.selectList(sql, user_id);
+        List<Map> objects = sqlSession.selectList(sql, user_id);
+        return objects;
     }
 
     @Override
@@ -112,7 +118,8 @@ public class UserDAOImpl implements IUserDAO {
         try {
             SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
             String sql = "com.isoft.mapping.User.LineAnalysis";
-            return sqlSession.selectList(sql);
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,7 +131,8 @@ public class UserDAOImpl implements IUserDAO {
         try {
             SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
             String sql = "com.isoft.mapping.User.BarAnalysis";
-            return sqlSession.selectList(sql);
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +144,8 @@ public class UserDAOImpl implements IUserDAO {
         try {
             SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
             String sql = "com.isoft.mapping.User.RadarAnalysis";
-            return sqlSession.selectList(sql);
+            List<Map> objects =sqlSession.selectList(sql);
+            return objects;
         } catch (Exception e) {
             e.printStackTrace();
         }
