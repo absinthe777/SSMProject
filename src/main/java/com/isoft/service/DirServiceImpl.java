@@ -9,8 +9,13 @@ import java.util.Map;
 
 @Service("IDirService")
 public class DirServiceImpl implements IDirService {
-    @Autowired
+    private final
     IDirDAO iDirDAO;
+
+    @Autowired
+    public DirServiceImpl(IDirDAO iDirDAO) {
+        this.iDirDAO = iDirDAO;
+    }
 
     @Override
     public List<Map> dirAnalysis(String user_id) {

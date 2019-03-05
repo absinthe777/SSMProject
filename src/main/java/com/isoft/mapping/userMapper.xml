@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.isoft.mapping.User">
     <select id="userStatusAnalysis" resultType="map">
-        select CASE `status` WHEN 1 THEN "激活" ELSE "未激活" END AS `status`, count(*) as count from user_info GROUP BY `status`
+        select CASE `status` WHEN 1 THEN '激活' ELSE '未激活' END AS `status`, count(*) as count from user_info GROUP BY `status`
     </select>
     <select id="dirAnalysis" parameterType="string" resultType="map">
         select a.dir_name, b.dir_name as `name` from dir_inf a

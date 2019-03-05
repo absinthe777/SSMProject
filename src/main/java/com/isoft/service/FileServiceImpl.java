@@ -9,8 +9,14 @@ import java.util.List;
 import java.util.Map;
 @Service
 public class FileServiceImpl implements IFileService {
-    @Autowired
+    private final
     IFileDAO fileDAOImpl;
+
+    @Autowired
+    public FileServiceImpl(IFileDAO fileDAOImpl) {
+        this.fileDAOImpl = fileDAOImpl;
+    }
+
     @Override
     public List<Map<String, Object>> fileUserFile(Map map) {
         return fileDAOImpl.fileUserFile(map);
