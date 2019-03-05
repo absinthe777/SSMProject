@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--Dynamic SQL-->
-<mapper namespace="com.isoft.mapping.File">
+<mapper namespace="com.isoft.mapping.Admin">
     <!--Get all Users-->
     <select id="findAllUser" resultType="map">
         select * from user_info;
