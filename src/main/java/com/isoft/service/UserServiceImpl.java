@@ -21,6 +21,12 @@ public class UserServiceImpl implements IUserService {
     public Map<String,Object> login(String uname,String upwd){
         return userDAO.login(uname, upwd);
     }
+
+    @Override
+    public Map<String, Object> findpwd(String uname, String email) {
+        return userDAO.findpwd(uname,email);
+    }
+
     @Override
     public int register(Map<String, Object> obj) {
         return userDAO.register(obj);

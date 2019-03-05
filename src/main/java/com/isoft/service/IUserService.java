@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface IUserService {
     Map<String,Object> login(String uname, String upwd);
+    Map<String,Object> findpwd(String uname,String email);
     int register(Map<String,Object> obj);
     int validateOldPwd(int userid,String oldpwd);
     int updateOldPwd(int userid,String newpwd);

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改成功</title>
+    <link type="text/css" href="other/css.css" rel="stylesheet" />
+    <link rel="stylesheet" href="js/node_modules/layui-src/dist/css/layui.css">
+</head>
+<body>
+<div id="findDiv" class="layui-fluid" style="width:50%" align="center">
+    <div class="layui-card">
+        <div class="for-liucheng">
+            <div class="liulist for-cur"></div>
+            <div class="liulist for-cur"></div>
+            <div class="liulist for-cur"></div>
+            <div class="liutextbox">
+                <div class="liutext for-cur"><em>1</em><br /><strong>验证身份</strong></div>
+                <div class="liutext for-cur"><em>2</em><br /><strong>设置新密码</strong></div>
+                <div class="liutext for-cur"><em>3</em><br /><strong>完成</strong></div>
+            </div>
+        </div>
+        <!--for-liucheng/-->
+        <div class="successs">
+            <h3>恭喜您，修改成功！</h3>
+        </div><!--forget-pwd/-->
+    </div><!--web-width/-->
+</div><!--content/-->
+<script type="text/javascript" src="js/node_modules/layui-src/dist/layui.all.js"></script>
+<script type="text/javascript" src="js/node_modules/jquery/dist/jquery.js"></script>
+<script>
+    // 主页面居中设置
+    $(function () {
+        var height = document.body.scrollHeight;
+        var logo_wrap = $("#findDiv").get(0);
+        var margin_top = (height-50) / 2;
+        logo_wrap.style.marginTop = margin_top + "px";
+    });
+</script>
+</body>
+</html>

@@ -22,6 +22,9 @@
     <select id="login" parameterType="map" resultType="map">
         select * from user_info where username=#{uname} and password=#{upwd}
     </select>
+    <select id="findpwd" parameterType="map" resultType="map">
+        select * from user_info where username=#{uname} and email=#{email}
+    </select>
     <insert id="register" parameterType="map">
     insert into user_info(username,`password`,email,register_time,status)
     values(#{uname},#{upwd},#{email},now(),0);

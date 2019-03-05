@@ -176,6 +176,22 @@ public class UserAction {
         }
     }
 
+    @RequestMapping(value = "/findpwd.do",method = RequestMethod.POST)
+    @ResponseBody
+    public Map findpwd(String uname, String email, HttpSession session){
+        Map<String, Object> findpwd = userServiceImpl.findpwd(uname, email);
+        Map<String, Object> map = new HashMap<>();
+        if(findpwd==null){
+            map.put("vermsg",0);
+            return map;
+        }else{
+            map.put("vermsg",1);
+            map.put("userid",findpwd.get("user_id").toString());
+            session.setAttribute("userid",findpwd.get("user_id").toString());
+            return map;
+        }
+    }
+
     @RequestMapping(value = "/findUserPwd.do")
     @ResponseBody
     public  String findUserPwd(HttpServletRequest request,String uname, String email) throws MessagingException {
@@ -195,7 +211,7 @@ public class UserAction {
         return "ok";
     }
 
-        @RequestMapping(value = "/register.do",method = RequestMethod.POST)
+    @RequestMapping(value = "/register.do",method = RequestMethod.POST)
     @ResponseBody
     public int register(String uname, String upwd, String email){
         Map<String, Object> map = new HashMap<>();

@@ -24,6 +24,16 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
+    public Map<String, Object> findpwd(String uname, String email) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql="com.isoft.mapping.User.findpwd";
+        Map<String, Object> map = new HashMap<>();
+        map.put("uname",uname);
+        map.put("email",email);
+        return sqlSession.selectOne(sql,map);
+    }
+
+    @Override
     public int register(Map<String, Object> obj) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.User.register";
