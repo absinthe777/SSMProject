@@ -31,7 +31,7 @@ public class UserAction {
             statusList.add(map.get("status").toString());
             countList.add(Integer.parseInt(map.get("count").toString()));
         }
-        Map map=new HashMap();
+        Map<String, Object> map=new HashMap<>();
         map.put("status",statusList);
         map.put("count",countList);
         return map;
@@ -46,23 +46,23 @@ public class UserAction {
         for (Map list : maps) {
             set.add(list.get("dir_name"));
         }
-        Iterator iterator = set.iterator();
-        while (iterator.hasNext()) {
-            Map map=new HashMap();
-            map.put("name",iterator.next());
-            List l=new ArrayList();
-            for (Map m: maps) {
-                if(map.containsValue(m.get("dir_name"))){
-                    Map mm=new HashMap();
-                    mm.put("name",m.get("name"));
-                    mm.put("value",0);
+        for (Object o : set) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", o);
+            List l = new ArrayList();
+            for (Map m : maps) {
+                if (map.containsValue(m.get("dir_name"))) {
+                    Map<String, Object> mm = new HashMap<>();
+                    mm.put("name", m.get("name"));
+                    mm.put("value", 0);
                     l.add(mm);
-                }}
+                }
+            }
 
-            map.put("children",l);
+            map.put("children", l);
             newList.add(map);
         }
-        Map map1=new HashMap();
+        Map<String, Object> map1=new HashMap<>();
         map1.put("name","目录结构");
         map1.put("children",newList);
         return map1;
@@ -78,7 +78,7 @@ public class UserAction {
             nameList.add(map.get("file_name").toString());
             downloadCountList.add(Integer.parseInt(map.get("downloadCount").toString()));
         }
-        Map map=new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("file_name",nameList);
         map.put("downloadCount",downloadCountList);
         return map;
@@ -94,7 +94,7 @@ public class UserAction {
             nameList.add(map.get("file_name").toString());
             sizeList.add(Integer.parseInt(map.get("file_size").toString()));
         }
-        Map map=new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("file_name",nameList);
         map.put("file_size",sizeList);
         return map;
@@ -108,7 +108,7 @@ public class UserAction {
         for (Map map:list){
             typeList.add(map.get("file_type").toString());
         }
-        Map map=new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("file_type",typeList);
         return map;
     }
@@ -116,8 +116,7 @@ public class UserAction {
     @RequestMapping(value = "/findUserInfoById.do",method = RequestMethod.GET)
     @ResponseBody
     public Map findUserInfoById(@RequestParam("userid") String user_id){
-        Map userInfo = userServiceImpl.findUserInfoById(user_id);
-        return userInfo;
+        return userServiceImpl.findUserInfoById(user_id);
     }
 
     @RequestMapping(value = "/updateOldUpwd.do",method = RequestMethod.POST)
@@ -127,24 +126,21 @@ public class UserAction {
         if(validate==0){
             return -1;
         }
-        else {
-            int i=userServiceImpl.updateOldPwd(userid,newpwd);
-            return i;
-        }
+        else
+            return userServiceImpl.updateOldPwd(userid,newpwd);
     }
 
     @RequestMapping(value = "/updateInfo.do",method = RequestMethod.POST)
     @ResponseBody
     public int updateUserInfo(UserInfo userinfo){
-        int i = userServiceImpl.updateUserInfo(userinfo);
-        return i;
+        return userServiceImpl.updateUserInfo(userinfo);
     }
 
     @RequestMapping(value = "/login.do",method = RequestMethod.POST)
     @ResponseBody
     public Map login(String uname, String upwd, HttpSession session){
         Map<String, Object> login = userServiceImpl.login(uname, upwd);
-        HashMap map=new HashMap();
+        Map<String, Object> map = new HashMap<>();
         if(login==null){
             map.put("loginmsg",0);
             return map;
@@ -154,7 +150,7 @@ public class UserAction {
             session.setAttribute("userid",login.get("user_id").toString());
             map.put("status",login.get("status").toString());
             session.setAttribute("status",login.get("status").toString());
-            if(login.get("photo")==null||login.get("photo").toString()=="")
+            if(login.get("photo")==null||login.get("photo").toString().equals(""))
                 map.put("photo","myphoto/myphoto.jpg");
             else
                 map.put("photo",login.get("photo").toString());
@@ -166,7 +162,7 @@ public class UserAction {
     @RequestMapping(value = "/register.do",method = RequestMethod.POST)
     @ResponseBody
     public int register(String uname, String upwd, String email){
-        Map map=new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("uname",uname);
         map.put("upwd",upwd);
         map.put("email",email);
