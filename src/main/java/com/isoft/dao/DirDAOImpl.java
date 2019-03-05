@@ -17,15 +17,13 @@ public class DirDAOImpl implements IDirDAO{
     public List<Map> dirAnalysis(String user_id) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.Dir.dirAnalysis";
-        List<Map> objects = sqlSession.selectList(sql, user_id);
-        return objects;
+        return sqlSession.selectList(sql, user_id);
     }
 
     @Override
     public Map findFilePathByDirId(String dir_id) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.Dir.findFilePathByDirId";
-        Map objects = sqlSession.selectOne(sql,dir_id);
-        return objects;
+        return sqlSession.selectOne(sql,dir_id);
     }
 }
