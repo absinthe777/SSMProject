@@ -19,35 +19,46 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Controller
 @Scope("prototype")
 @RequestMapping("/file")
 public class UploadAction {
-    @Autowired
+    private final
     IUserService userServiceImpl;
-    @Autowired
+    private final
     IFileService fileServiceImpl;
-    @Autowired
+    private final
     IDirService iDirService;
+
+    @Autowired
+    public UploadAction(IUserService userServiceImpl, IFileService fileServiceImpl, IDirService iDirService) {
+        this.userServiceImpl = userServiceImpl;
+        this.fileServiceImpl = fileServiceImpl;
+        this.iDirService = iDirService;
+    }
 
     @RequestMapping(value = "/uploadSelectFile.do", method = RequestMethod.POST)
     @ResponseBody
     public Map uploadSelectFile(HttpSession session,@RequestParam("file") MultipartFile file, String file_type, String user_id, String file_dir_id) {
         String realPath = session.getServletContext().getRealPath("/WEB-INF/resourses");
-        Map<String,Object> filePath = iDirService.findFilePathByDirId(file_dir_id);
+        Map filePath = iDirService.findFilePathByDirId(file_dir_id);
         File fileDir=new File(realPath+"/"+filePath.get("filepath"));
         if(!fileDir.exists()){
             fileDir.mkdirs();//创建文件夹
         }
         String fileName = file.getOriginalFilename();//获得上传文件的文件名称
-        File newFile = new File(realPath+filePath.get("filepath"), fileName);
-        Map map = new HashMap();
+        File newFile = null;
+        if (fileName != null) {
+            newFile = new File(realPath+filePath.get("filepath"), fileName);
+        }
+        Map<String, Object> map = new HashMap<>();
         try {
             file.transferTo(newFile);//实现文件上传的方法
             //完成数据表信息添加
-            Map fileInfomap=new HashMap();
+            Map<String, Object> fileInfomap = new HashMap<>();
             fileInfomap.put("file_name",file.getOriginalFilename());
             fileInfomap.put("file_size",file.getSize());
             fileInfomap.put("file_type",file_type);
@@ -76,7 +87,7 @@ public class UploadAction {
             File file = new File(realPath);
             response.setContentType("application/x-msdownload;");
             response.setHeader("Content-disposition", "attachment; filename=" +
-                    new String(fileName.getBytes("utf-8"), "ISO8859-1"));
+                    new String(fileName.getBytes(StandardCharsets.UTF_8), "ISO8859-1"));
             response.setHeader("Content-Length", String.valueOf(file.length()));
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
@@ -102,7 +113,7 @@ public class UploadAction {
     @ResponseBody
     public Map uploadPersonPhoto(@RequestParam("file") MultipartFile file, HttpSession session) {
         String userid = session.getAttribute("userid").toString();
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         System.out.println("---" + userid);
         try {
             if (file != null) {

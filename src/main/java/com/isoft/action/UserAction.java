@@ -30,8 +30,13 @@ public class UserAction {
     String from;
     @Value("${authCode}")
     String authCode;
-    @Autowired
+    private final
     IUserService userServiceImpl;
+
+    @Autowired
+    public UserAction(IUserService userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @RequestMapping(value = "/PieAnalysis.do",method = RequestMethod.GET)
     @ResponseBody
