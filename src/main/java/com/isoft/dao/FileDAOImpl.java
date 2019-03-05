@@ -1,10 +1,12 @@
 package com.isoft.dao;
 
+import com.isoft.dao.IFileDAO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +60,6 @@ public class FileDAOImpl implements IFileDAO {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql = "com.isoft.mapping.File.updateFileStatus";
         int update = sqlSession.update(sql, map);
-        sqlSession.commit();
         return update;
     }
 
@@ -67,7 +68,6 @@ public class FileDAOImpl implements IFileDAO {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql = "com.isoft.mapping.File.updateDownloadCount";
         int update = sqlSession.update(sql,file_id);
-        sqlSession.commit();
         return update;
     }
 
