@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import javax.mail.MessagingException;
@@ -192,9 +193,9 @@ public class UserAction {
         }
     }
 
-    @RequestMapping(value = "/findUserPwd.do")
+    @RequestMapping(value = "/findUserPwd.do", method = RequestMethod.POST)
     @ResponseBody
-    public  String findUserPwd(HttpServletRequest request,String uname, String email) throws MessagingException {
+    public  String findUserPwd(HttpServletRequest request,String userId, String email) throws MessagingException {
         JavaMailSenderImpl javaMailSender=new JavaMailSenderImpl();
         javaMailSender.setHost(smtp);
         javaMailSender.setUsername(from);
@@ -205,10 +206,25 @@ public class UserAction {
         mimeMessageHelper.setFrom(from);
         mimeMessage.setSubject("找回密码邮件");
         String hrefString=request.getScheme()+"://"+request.getServerName()+":"+request.getLocalPort()
-                +"/"+request.getServletContext().getContextPath()+"/user/getUserPwd.do?uname="+uname;
+                +"/"+request.getServletContext().getContextPath()+"/user/findUserPwd2.do?user_id="+userId;
         mimeMessage.setText("单击下面链接修改密码："+hrefString);
         javaMailSender.send(mimeMessage);
-        return "ok";
+        return "邮件已发送，请到邮箱查看。";
+    }
+
+    @RequestMapping(value = "/findUserPwd2.do")
+    @ResponseBody
+    public String findUserPwd3(String userId, RedirectAttributes attributes) {
+        attributes.addAttribute("userId", userId);
+        return "redirect:/findUserPwd2.html";
+    }
+
+    @RequestMapping(value = "/findUserPwd3.do")
+    @ResponseBody
+    public Map findUserPwd2(int userId, String newPwd) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("vermsg", userServiceImpl.updateOldPwd(userId, newPwd));
+        return map;
     }
 
     @RequestMapping(value = "/register.do",method = RequestMethod.POST)

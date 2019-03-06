@@ -9,7 +9,7 @@
         function next() {
             var upwd = $("#upwd1").val();
             var rupwd = $("#rupwd1").val();
-            if (upwd.length == 0) {
+            if (upwd.length === 0) {
                 layer.tips("密码不能为空!", "#upwd1", {
                     tips: [2, "#000000"],
                     time: 2000
@@ -23,26 +23,31 @@
                 });
                 return;
             }
-            if (rupwd.length == 0) {
+            if (rupwd.length === 0) {
                 layer.tips("确认密码不能为空!", "#rupwd1", {
                     tips: [2, "#000000"],
                     time: 2000
                 });
                 return;
             }
-            if (upwd!=rupwd) {
+            if (upwd !== rupwd) {
                 layer.tips("密码输入不一致!", "#rupwd1", {
                     tips: [2, "#000000"],
                     time: 2000
                 });
                 return;
             }
+            // Get user ID from current address
+            let userId = this.location.search.substr(1).split('=')[1];
             $.ajax({
-                url:"user/register.do",
+                url:"user/findUserPwd3.do",
                 method:"post",
-                data:$("#verform").serialize(),//序列化
+                data: {
+                    newPwd: rupwd,
+                    userId: userId
+                }, // 序列化
                 beforeSend:function(){
-                    index=layer.load(3,{
+                    index = layer.load(3,{
                         shade:[0.5,'#000']
                     });
                 },
@@ -51,13 +56,11 @@
                 },
                 success:function (result) {
                     var jsonObj=  JSON.parse(result);
-                    if(jsonObj.vermsg != 0){
-                        sessionStorage.setItem("uname",uname);
-                        sessionStorage.setItem("user_id",jsonObj.userid);
+                    if(jsonObj.vermsg !== 0){
                         window.location.href="findUserPwd3.html";
                     }else
                     {
-                        layer.msg("登录失败");
+                        layer.msg("修改失败");
                     }
                 },
                 error:function () {

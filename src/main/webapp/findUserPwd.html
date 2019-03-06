@@ -9,9 +9,9 @@
         function next() {
             var uname=$("#uname").val();
             var email=$("#email").val();
-            var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            var pattern = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
             /*var input_Code=$("#vcode").val();*/
-            if (uname.length==0){
+            if (uname.length === 0){
                 layer.tips("抱歉，用户名不能为空!","#uname",{
                     tips:[2,"#000000"],
                     time:2000
@@ -46,13 +46,30 @@
                 },
                 success:function (result) {
                     var jsonObj=  JSON.parse(result);
-                    if(jsonObj.vermsg != 0){
-                            sessionStorage.setItem("uname",uname);
+                    if(jsonObj.vermsg !== 0){
                             sessionStorage.setItem("user_id",jsonObj.userid);
-                            window.location.href="findUserPwd2.html";
+                            $.ajax({
+                                url: "user/findUserPwd.do",
+                                method: "post",
+                                data: {
+                                    userId: jsonObj.userid,
+                                    email: email
+                                },
+                                beforeSend:function(){
+                                    index=layer.load(3,{
+                                        shade:[0.5,'#000']
+                                    });
+                                },
+                                complete:function(){
+                                    layer.close(index);
+                                },
+                                success: (data) => {
+
+                                }
+                            })
                     }else
                     {
-                        layer.msg("登录失败");
+                        layer.msg("用户验证失败");
                     }
                 },
                 error:function () {
