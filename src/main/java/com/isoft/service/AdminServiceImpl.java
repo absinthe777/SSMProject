@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-@Service("AdminService")
+@Service("IAdminService")
 public class AdminServiceImpl implements IAdminService {
     private final
     IAdminDAO iAdminDAO;
@@ -17,9 +17,15 @@ public class AdminServiceImpl implements IAdminService {
         this.iAdminDAO = iAdminDAO;
     }
 
+
     @Override
-    public List<Map> findAllUser() {
-        return iAdminDAO.findAllUser();
+    public List<Map<String, Object>> findAllUser(Map map) {
+        return iAdminDAO.findAllUser(map);
+    }
+
+    @Override
+    public int updateUserPwd(Map map) {
+        return iAdminDAO.updateUserPwd(map);
     }
 
     @Override

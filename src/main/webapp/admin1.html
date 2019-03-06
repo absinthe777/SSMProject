@@ -27,12 +27,12 @@
             $("#userPhoto").attr("src",photo);//这句话是给img标记src属性赋值
             $("#uname").html(uname);
             if (temp == 0)
-                $("#mainContent").load("fileManager.html");
+                $("#mainContent").load("userManager.html");
         });
-        function fileManager(fileType,isShare){
-            sessionStorage.setItem("fileType",fileType);
-            sessionStorage.setItem("isShare",isShare);
-            $("#mainContent").load("fileManager.html");
+        function userManager(){
+            /*sessionStorage.setItem("fileType",fileType);
+            sessionStorage.setItem("isShare",isShare);*/
+            $("#mainContent").load("userManager.html");
         }
         function personCenter(){
             $("#mainContent").load("personCenter.html");
@@ -50,22 +50,6 @@
                 }
             );
         }
-        function showAnalysis() {
-            $("#mainContent").load("analysis.html");
-        }
-        function showUploadDiv() {
-            layer.open({
-                type: 2,
-                title: "上传文件",
-                area: ['800px', '400px'],
-                content: "uploadSelectFile.html",
-                btn: ["关闭"],
-                btn1: function () {
-                    layer.closeAll();
-                }
-            });
-
-        }
     </script>
 </head>
 <body class="layui-layout-body">
@@ -74,12 +58,18 @@
         <div class="layui-logo">OneTrueGod网络云盘</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="javascript:fileManager('all',-1)">文件管理</a></li>
+            <li class="layui-nav-item"><a href="javascript:userManager();">用户管理</a></li>
             <li class="layui-nav-item">
-                <a href="javascript:showUploadDiv()">上传文件</a>
+                <a href="javascript:personCenter();">用户信息管理</a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;">创建文件夹</a>
+                <a href="javascript:;">文件管理</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">目录管理</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">图表管理</a>
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">
@@ -96,55 +86,12 @@
             <li class="layui-nav-item"><a href="javaScript:exit()">退出</a></li>
         </ul>
     </div>
-
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="#"><span class="layui-icon layui-icon-password"></span>私有文件</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:fileManager('isVideo',0);"><span
-                                class="layui-icon layui-icon-video"></span> 视频</a></dd>
-                        <dd><a href="javascript:fileManager('isAudio',0);"><span
-                                class="layui-icon layui-icon-headset"></span> 音乐</a></dd>
-                        <dd><a href="javascript:fileManager('isPicture',0);"><span
-                                class="layui-icon layui-icon-picture"></span> 照片</a></dd>
-                        <dd><a href="javascript:fileManager('isDocument',0);"><span
-                                class="layui-icon layui-icon-file"></span> 文档</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="#"><span class="layui-icon layui-icon-share"></span>共享文件</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:fileManager('isVideo',1);"><span
-                                class="layui-icon layui-icon-video"></span> 视频</a></dd>
-                        <dd><a href="javascript:fileManager('isAudio',1);"><span
-                                class="layui-icon layui-icon-headset"></span> 音乐</a></dd>
-                        <dd><a href="javascript:fileManager('isPicture',1);"><span
-                                class="layui-icon layui-icon-picture"></span> 照片</a></dd>
-                        <dd><a href="javascript:fileManager('isDocument',1);"><span
-                                class="layui-icon layui-icon-file"></span> 文档</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="#"><span class="layui-icon layui-icon-util"></span> 个人资源统计</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javaScript:showAnalysis()"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart-screen"></span> 报表打印</a>
-                        </dd>
-                    </dl>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="layui-body">
+    <div>
         <!-- 内容主体区域 -->
         <div id="mainContent" style="padding: 15px;">内容主体区域</div>
     </div>
 
-    <div class="layui-footer">
+    <div class="layui-footer" align="center">
         <!-- 底部固定区域 -->
         &copy OneTrueGod 2018-2019全职服务
     </div>

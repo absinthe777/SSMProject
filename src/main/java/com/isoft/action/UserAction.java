@@ -205,7 +205,7 @@ public class UserAction {
         mimeMessageHelper.setFrom(from);
         mimeMessage.setSubject("找回密码邮件");
         String hrefString=request.getScheme()+"://"+request.getServerName()+":"+request.getLocalPort()
-                +"/"+request.getServletContext().getContextPath()+"/user/getUserPwd.do?uname"+uname;
+                +"/"+request.getServletContext().getContextPath()+"/user/getUserPwd.do?uname="+uname;
         mimeMessage.setText("单击下面链接修改密码："+hrefString);
         javaMailSender.send(mimeMessage);
         return "ok";

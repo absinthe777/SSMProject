@@ -3,11 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--Dynamic SQL-->
-<mapper namespace="com.isoft.mapping.File">
+<mapper namespace="com.isoft.mapping.Admin">
     <!--Get all Users-->
     <select id="findAllUser" resultType="map">
         select * from user_info;
     </select>
+    <update id="updateUserPwd" parameterType="map" >
+        update user_info set password=#{password} where user_id=#{user_id}
+    </update>
     <!--Delete a single user-->
     <delete id="deleteUserById" parameterType="string">
         delete from user_info where user_id = #{user_id};

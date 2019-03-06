@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="js/node_modules/layui-src/dist/css/layui.css">
+    <script src="js/node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="js/node_modules/layui-src/dist/layui.all.js"></script>
+    <script>
+       /* function changeFileStatus(file_status,file_id) {
+            $.ajax({
+                url: "file/updateFileStatus.do",
+                method: "post",
+                data: {
+                    "status": status,
+                    "user_id": user_id
+                },
+                success: function (data) {
+                    /!*if (data == 1 && file_status == 1)
+                        layer.msg('文件已私有！', {icon: 1,time:1000});
+                    if (data == 1 && file_status == 0)
+                        layer.msg('文件已共享！', {icon: 1,time:1000});*!/
+                    window.parent.location.reload();//刷新当前页面
+                }, error: function () {
+                    layer.msg('请求服务器失败！', {icon: 2});
+                },
+            });
+        }*/
+
+        function deleteUserById(user_id) {
+            layer.confirm('是否要真的删除选中数据？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: "admin/deleteUserById.do",
+                        data: {"user_id": user_id},
+                        method: "post",
+                        success: function (data) {
+                            if (data > 0)
+                                layer.msg("成功删除" + data + "个文件", {icon: 1});
+                            else
+                                layer.msg('文件删除失败', {icon: 2});
+                            /*数据删除成功后刷新表格*/
+                            layui.table.reload("id", {
+                                where: {
+                                    "user_id": sessionStorage.getItem("user_id")
+                                }
+                            });
+                        },
+                        error: function () {
+                            layer.msg('请求服务器失败！', {icon: 1});
+                        }
+                    });
+                }
+            );
+        }
+        $(function () {
+            getUserFile(1,10);
+            layui.table.on("edit(usertable)", function (rs) {
+                $.ajax({
+                    url: "admin/updateUserPwd.do",
+                    method: "get",
+                    data: {"obj": JSON.stringify(rs.data)},
+                    success: function (data) {
+                        if (data == 0)
+                            layer.msg("编辑" + rs.data.file_name + "失败");
+                        else
+                            layer.msg("编辑" + rs.data.file_name + "成功");
+                    },
+                    error: function () {
+                        layer.msg("请求服务器失败！");
+                    }
+                });
+            });
+        });
+
+        // 获取用户文件列表
+        function getUserFile() {
+            layui.use("table", function () {
+                layui.table.render({
+                    elem: "#user_manager_table",
+                    url: "admin/findAllUser.do",
+                    title: "用户管理",
+                    where: {
+                        "user_id": sessionStorage.getItem("user_id"),
+                    },
+                    page: true,
+                    id: "id",
+                    size: "md",
+                    toolbar: '#tbl_toolbar',
+                    limits: [10, 20, 50,100],
+                    loading: true,
+                    even: true,
+                    cols: [[
+                        {field: "user_id", title: "ID", type: "checkbox"},
+                        {field: "username", title: "用户名", totalRow: true},
+                        {field: "password", title: "用户密码", edit: "text", totalRow: true},
+                        {field: "email", title: "邮箱", edit: "text", totalRow: true},
+                        {
+                            field: "register_time", title: "注册时间",
+                            templet: function (row) {
+                                return new Date(row.register_time).toLocaleString();
+                            }
+                        },
+                        {
+                            field: "status", title: "权限", width: 100,
+                            templet: function (row) {
+                                if ((row.status === 1))
+                                    return "<a href='javascript:changeFileStatus(1," + row.user_id + ")'>" +
+                                        "<input name='role'   type='checkbox' lay-skin='switch'   lay-text='会员|非会员' value='1' checked></a>";
+                                else
+                                    return "<a href='javascript:changeFileStatus(0," + row.user_id + ")'>" +
+                                        "<input name='role'  type='checkbox' lay-skin='switch'  lay-text='会员|非会员' value='0'></a>";
+
+                            }
+                        },
+                        {filed:"photo",title:"头像",width:100,align:"center"},
+                        {
+                            filed: "user_id", title: "操作", width: 100,
+                            templet: function (row) {
+                                var dele="<a href='javascript:deleteUserById(" + row.user_id + ")' title='删除' class='layui-badge' ><span class='layui-icon layui-icon-delete'></span></a>";
+                                return dele;
+                            }
+                        }
+                    ]]
+                });
+                layui.table.on("toolbar(usertable)", function (rs) {
+                    var event = rs.event;
+                    if (event === "add") {
+                        layer.msg(event);
+                    }
+                    if (event === "delete") {
+                        var tableselectdate = layui.table.checkStatus("id").data;
+                        var arr = new Array();
+                        $.each(tableselectdate, function (index, row, rs) {
+                            arr[index] = row.user_id;
+                        });
+                        if (arr.length === 0) {
+                            layer.msg("请选择一行数据");
+                        } else {
+                            layer.confirm('是否要真的删除选中数据？', {
+                                btn: ['确定', '取消'],
+                                btnAlign: 'c'  //按钮居中显示
+                            }, function () {
+                                $.ajax({
+                                    url: "admin/deleteUserById.do",
+                                    data: {"user_id": JSON.stringify(arr)},
+                                    method: "post",
+                                    success: function (data) {
+                                        if (data > 0)
+                                            layer.msg("成功删除" + data + "个文件", {icon: 1});
+                                        else
+                                            layer.msg('文件删除失败', {icon: 2});
+                                        /*数据删除成功后刷新表格*/
+                                        layui.table.reload("id", {
+                                            where: {
+                                                "user_id": sessionStorage.getItem("user_id")
+                                            }
+                                        });
+                                    },
+                                    error: function () {
+                                        layer.msg('请求服务器失败！', {icon: 1});
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        function changeRole(row) {
+            var obj = JSON.parse(row)
+            layer.msg(obj.user_id + "," + status);
+        }
+    </script>
+
+</head>
+<body>
+<script type="text/html" id="tbl_toolbar">
+    <button class="layui-btn" lay-event="delete">
+        <i class="layui-icon">&#xe640;</i> 删除
+    </button>
+</script>
+<table id="user_manager_table" lay-filter="usertable"></table>
+</body>
+</html>
