@@ -227,6 +227,12 @@ public class UserAction {
         return map;
     }
 
+    @RequestMapping(value = "/findUserSuccess.do")
+    @ResponseBody
+    public String findUserSuccess() {
+        return "redirect:/findUserPwd3.html";
+    }
+
     @RequestMapping(value = "/register.do",method = RequestMethod.POST)
     @ResponseBody
     public int register(String uname, String upwd, String email){

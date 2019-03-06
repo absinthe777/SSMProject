@@ -57,7 +57,23 @@
                 success:function (result) {
                     var jsonObj=  JSON.parse(result);
                     if(jsonObj.vermsg !== 0){
-                        window.location.href="findUserPwd3.html";
+                        $.ajax({
+                            url: "user/findUserSuccess.do",
+                            method: "get",
+                            beforeSend:function(){
+                                index = layer.load(3,{
+                                    shade:[0.5,'#000']
+                                });
+                            },
+                            complete:function(){
+                                layer.close(index);
+                            },
+                            success: function () {
+
+                            },error: function () {
+                                layer.alert("服务器连接失败"), {icon:6};
+                            }
+                        })
                     }else
                     {
                         layer.msg("修改失败");
