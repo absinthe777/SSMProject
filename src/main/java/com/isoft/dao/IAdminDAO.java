@@ -5,9 +5,10 @@ import java.util.Map;
 
 public interface IAdminDAO {
     List<Map<String, Object>> findAllUser(Map map); //Get all Users
+    List<Map<String, Object>> findUserInfo(Map map); //Get all Users
     int updateUserPwd(Map map);
-    int deleteUserById(String id); // Delete a single user
-    int activeAllUser(); // Active all users
-    int activeUserById(String id); // Active a single user
+    int updateUserManager(Map map);
+    int deleteUserById(List<String> id); // Delete a single user
+    int updateUserStatus(Map map); // Active users
     int insertOneUser(Map map); // Insert one user
 }

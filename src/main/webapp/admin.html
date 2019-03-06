@@ -40,6 +40,9 @@
         function redirectUpdateUpwd() {
             $("#mainContent").load("updateUpwd.html");
         }
+        function newDirection() {
+            $("#mainContent").load("newDirection.html");
+        }
         function exit() {
             layer.confirm("确定要退出系统么？",
                 {title:"确认提示",
@@ -79,7 +82,7 @@
                 <a href="javascript:showUploadDiv()">上传文件</a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;">创建文件夹</a>
+                <a href="javascript:newDirection();">创建文件夹</a>
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">

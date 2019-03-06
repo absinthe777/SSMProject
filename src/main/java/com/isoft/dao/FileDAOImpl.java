@@ -33,6 +33,23 @@ public class FileDAOImpl implements IFileDAO {
     }
 
     @Override
+    public List<Map<String, Object>> findAllFile(Map map) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession();
+        String sql = "com.isoft.mapping.File.findAllFile";
+        String sql_count = "com.isoft.mapping.File.findRSCount";
+        try{
+            List<Map<String, Object>> objects = sqlSession.selectList(sql, map);
+            Map<String, Object> rscount = sqlSession.selectOne(sql_count, map);
+            objects.add(rscount);
+            return objects;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public int updateFileName(Map map) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql = "com.isoft.mapping.File.updateFileName";

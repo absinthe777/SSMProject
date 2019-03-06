@@ -74,8 +74,8 @@
                             sessionStorage.setItem("uname",uname);
                             sessionStorage.setItem("user_id",jsonObj.userid);
                             sessionStorage.setItem("photo",jsonObj.photo);
-                            if (jsonObj.username == "admin") {
-                                window.location.href="admin1.html";
+                            if (jsonObj.username === "admin") {
+                                window.location.href="superAdmin.html";
                             } else {
                                 window.location.href = "admin.html";
                             }

@@ -6,22 +6,43 @@
 <mapper namespace="com.isoft.mapping.Admin">
     <!--Get all Users-->
     <select id="findAllUser" resultType="map">
-        select * from user_info;
+        select * from user_info where username !="admin"
+        <if test="page!=null and limit!=null">
+            limit #{page},#{limit}
+        </if>
+    </select>
+    <select id="findUserInfo" resultType="map">
+        SELECT a.user_id,a.username,b.runame,b.gender,b.birthday,b.address,b.telephone,b.remark FROM user_info a INNER JOIN user_detail_inf b ON a.user_id=b.user_id WHERE username!="admin"
+        <if test="page!=null and limit!=null">
+            limit #{page},#{limit}
+        </if>
+    </select>
+    <select id="findRSCount" parameterType="map" resultType="map">
+        select count(*)-1 as `count` from user_info;
+        select count(*)-1 as `count` from user_detail_inf;
     </select>
     <update id="updateUserPwd" parameterType="map" >
-        update user_info set password=#{password} where user_id=#{user_id}
+        update user_info set password=#{password},email=#{email} where user_id=#{user_id};
+    </update>
+    <update id="updateUserManager" parameterType="map" >
+        update user_detail_inf set runame=#{runame},gender=#{gender},address=#{address},telephone=#{telephone},remark=#{remark} where user_id=#{user_id};
     </update>
     <!--Delete a single user-->
-    <delete id="deleteUserById" parameterType="string">
-        delete from user_info where user_id = #{user_id};
+    <delete id="deleteUserById" parameterType="java.util.List">
+        delete from user_info where user_id in(
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
     </delete>
-    <!--Active all users-->
-    <update id="activeAllUser">
-        update user_info set status = 1;
-    </update>
-    <!--Active a single user-->
-    <update id="activeUserById" parameterType="string">
-        update user_info set status = 1 where user_id = #{user_id}
+    <!--Active users-->
+    <update id="updateUserStatus" parameterType="map" >
+        <if test="status==1">
+            update user_info set `status`=0 where user_id=#{user_id}
+        </if>
+        <if test="status==0">
+            update user_info set `status`=1 where user_id=#{user_id}
+        </if>
     </update>
     <!--Insert one user-->
     <insert id="insertOneUser" parameterType="map">

@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -214,23 +218,23 @@ public class UserAction {
 
     @RequestMapping(value = "/findUserPwd2.do")
     @ResponseBody
-    public String findUserPwd3(String userId, RedirectAttributes attributes) {
-        attributes.addAttribute("userId", userId);
-        return "redirect:/findUserPwd2.html";
+    public void findUserPwd3(HttpServletRequest request, HttpServletResponse response, String userId) throws ServletException, IOException {
+        request.getRequestDispatcher("../findUserPwd3.html").forward(request, response);
     }
 
     @RequestMapping(value = "/findUserPwd3.do")
     @ResponseBody
-    public Map findUserPwd2(int userId, String newPwd) {
+    public ModelAndView findUserPwd2(int userId, String newPwd) {
         Map<String, Object> map = new HashMap<>();
-        map.put("vermsg", userServiceImpl.updateOldPwd(userId, newPwd));
-        return map;
+        userServiceImpl.updateOldPwd(userId, newPwd);
+        map.put("vermsg", 1);
+        return new ModelAndView("redirect:../findUserPwd4.html");
     }
 
-    @RequestMapping(value = "/findUserSuccess.do")
-    @ResponseBody
-    public String findUserSuccess() {
-        return "redirect:/findUserPwd3.html";
+        @RequestMapping(value = "/findUserSuccess.do")
+        @ResponseBody
+        public void findUserSuccess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            request.getRequestDispatcher("../findUserPwd4.html").forward(request, response);
     }
 
     @RequestMapping(value = "/register.do",method = RequestMethod.POST)

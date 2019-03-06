@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @Scope("prototype")
@@ -23,11 +21,35 @@ public class AdminAction {
 
     @RequestMapping(value = "/findAllUser.do", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> findAllUser() {
+    public Map<String, Object> findAllUser(int page, int limit) {
         Map<String, Object> map = new HashMap<>();
+        map.put("page", (page - 1) * limit);
+        map.put("limit", limit);
         List<Map<String, Object>> maps = adminServiceImpl.findAllUser(map);
+        int count = Integer.parseInt(maps.get(maps.size() - 1).get("count").toString());
         maps.remove(maps.size() - 1);
         Map<String, Object> map1 = new HashMap<>();
+        map1.put("count", count);
+        map1.put("data", maps);
+        if (maps.size() > 0)
+            map1.put("msg", "查询成功");
+        else
+            map1.put("msg", "还没有上传文件");
+        map1.put("code", 0);
+        return map1;
+    }
+
+    @RequestMapping(value = "/findUserInfo.do", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> findUserInfo(int page, int limit) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("page", (page - 1) * limit);
+        map.put("limit", limit);
+        List<Map<String, Object>> maps = adminServiceImpl.findUserInfo(map);
+        int count = Integer.parseInt(maps.get(maps.size() - 1).get("count").toString());
+        maps.remove(maps.size() - 1);
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("count", count);
         map1.put("data", maps);
         if (maps.size() > 0)
             map1.put("msg", "查询成功");
@@ -46,25 +68,41 @@ public class AdminAction {
         return i;
     }
 
-    @RequestMapping(value = "deleteUserById.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateUserManager.do", method = RequestMethod.GET)
     @ResponseBody
-    public int deleteUserById(String id) {
-        int delete = adminServiceImpl.deleteUserById(id);
-        return delete == 0? -1:delete;
-    }
-    
-    @RequestMapping(value = "activeAlluser.do", method = RequestMethod.POST)
-    @ResponseBody
-    public int activeAllUser() {
-        int update = adminServiceImpl.activeAllUser();
-        return update == 0? -1:update;
+    public int updateUserManager(String obj) {
+        Map map = (Map) JSON.parse(obj);
+        System.out.println(map + "---");
+        int i = adminServiceImpl.updateUserManager(map);
+        return i;
     }
 
-    @RequestMapping(value = "activeUserById.do", method = RequestMethod.POST)
+    @RequestMapping(value = "deleteUserById.do", method = RequestMethod.POST)
     @ResponseBody
-    public int activeUserById(String id) {
-        int update = adminServiceImpl.activeUserById(id);
-        return update == 0? -1:update;
+    public int deleteUserById(String user_id) {
+        String[] split = user_id.substring(1, user_id.length() - 1).split(",");
+        List<String> strings = Arrays.asList(split);//把数组转化成List
+        int i = adminServiceImpl.deleteUserById(strings);
+        return i;
+    }
+
+    @RequestMapping(value = "/deleteOneUserById.do", method = RequestMethod.POST)
+    @ResponseBody
+    public int deleteOneFileById(String user_id) {
+        List list = new ArrayList();
+        list.add(user_id);
+        int i = adminServiceImpl.deleteUserById(list);
+        return i;
+    }
+
+    @RequestMapping(value = "/updateUserStatus.do", method = RequestMethod.POST)
+    @ResponseBody
+    public int updateUserStatus(String status, String user_id) {
+        Map map = new HashMap();
+        map.put("user_id", user_id);
+        map.put("status", status);
+        int i = adminServiceImpl.updateUserStatus(map);
+        return i;
     }
 
     @RequestMapping(value = "insertOneUser.do", method = RequestMethod.POST)
@@ -73,4 +111,5 @@ public class AdminAction {
         int insert = adminServiceImpl.insertOneUser(map);
         return insert == 0? -1:insert;
     }
+
 }

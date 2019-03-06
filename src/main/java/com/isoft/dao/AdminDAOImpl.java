@@ -17,7 +17,34 @@ public class AdminDAOImpl implements IAdminDAO{
     public List<Map<String, Object>> findAllUser(Map map) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql = "com.isoft.mapping.Admin.findAllUser";
-        return sqlSession.selectList(sql);
+        String sql_count = "com.isoft.mapping.Admin.findRSCount";
+        try{
+            List<Map<String, Object>> objects = sqlSession.selectList(sql, map);
+            Map<String, Object> rscount = sqlSession.selectOne(sql_count, map);
+            objects.add(rscount);
+            return objects;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> findUserInfo(Map map) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.Admin.findUserInfo";
+        String sql_count = "com.isoft.mapping.Admin.findRSCount";
+        try{
+            List<Map<String, Object>> objects = sqlSession.selectList(sql, map);
+            Map<String, Object> rscount = sqlSession.selectOne(sql_count, map);
+            objects.add(rscount);
+            return objects;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -29,42 +56,35 @@ public class AdminDAOImpl implements IAdminDAO{
         return i;
     }
 
+    @Override
+    public int updateUserManager(Map map) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.Admin.updateUserManager";
+        int i = sqlSession.update(sql, map);
+        sqlSession.commit(true);
+        return i;
+    }
 
     @Override
-    public int deleteUserById(String id) {
+    public int deleteUserById(List<String> list) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.Admin.deleteUserById";
         try {
-            String sql = "com.isoft.mapping.Admin.deleteUserById";
-            int delete = sqlSession.delete(sql, id);
-            sqlSession.commit();
-            return delete;
+            int dele = sqlSession.delete(sql, list);
+            sqlSession.commit(true);
+            return dele;
         } catch (Exception e) {
             e.printStackTrace();
-            sqlSession.rollback();
         }
         return 0;
     }
 
     @Override
-    public int activeAllUser() {
+    public int updateUserStatus(Map map) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
-        String sql = "com.isoft.mapping.Admin.activeAllUser";
-        return sqlSession.update(sql);
-    }
-
-    @Override
-    public int activeUserById(String id) {
-        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
-        try {
-            String sql = "com.isoft.mapping.Admin.activeUserById";
-            int update = sqlSession.update(sql, id);
-            sqlSession.commit();
-            return update;
-        } catch (Exception e) {
-            e.printStackTrace();
-            sqlSession.rollback();
-        }
-        return 0;
+        String sql = "com.isoft.mapping.Admin.updateUserStatus";
+        int update = sqlSession.update(sql, map);
+        return update;
     }
 
     @Override

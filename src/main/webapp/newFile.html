@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="js/node_modules/layui-src/dist/css/layui.css">
+    <script type="text/javascript" src="js/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="js/node_modules/layui-src/dist/layui.all.js"></script>
+</head>
+<script>
+    function doClick() {
+        sessionStorage.setItem("directory_name", $("#filename").val());
+    }
+</script>
+
+<body>
+
+<div class="layui-container">
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">文件夹名称:</label>
+            <div class="layui-input-block">
+                <input name="title" class="layui-input" id="filename" type="text" autocomplete="off" lay-verify="title" value="新建文件夹">
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+</body>
+</html>

@@ -30,15 +30,15 @@
                 $("#mainContent").load("userManager.html");
         });
         function userManager(){
-            /*sessionStorage.setItem("fileType",fileType);
-            sessionStorage.setItem("isShare",isShare);*/
             $("#mainContent").load("userManager.html");
         }
-        function personCenter(){
-            $("#mainContent").load("personCenter.html");
+        function personManager(){
+            $("#mainContent").load("personManager.html");
         }
-        function redirectUpdateUpwd() {
-            $("#mainContent").load("updateUpwd.html");
+        function fileManager(fileType,isShare){
+            sessionStorage.setItem("fileType",fileType);
+            sessionStorage.setItem("isShare",isShare);
+            $("#mainContent").load("allfileManager.html");
         }
         function exit() {
             layer.confirm("确定要退出系统么？",
@@ -60,16 +60,10 @@
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="javascript:userManager();">用户管理</a></li>
             <li class="layui-nav-item">
-                <a href="javascript:personCenter();">用户信息管理</a>
+                <a href="javascript:personManager();">用户信息管理</a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;">文件管理</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">目录管理</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">图表管理</a>
+                <a href="javascript:fileManager('all',-1);">文件管理</a>
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">

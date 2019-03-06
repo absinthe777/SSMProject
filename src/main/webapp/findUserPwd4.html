@@ -2,67 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>确认新密码</title>
-    <link type="text/css" href="../other/css.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../js/node_modules/layui-src/dist/css/layui.css">
-    <script>
-        function next() {
-            var upwd = $("#upwd1").val();
-            var rupwd = $("#rupwd1").val();
-            if (upwd.length === 0) {
-                layer.tips("密码不能为空!", "#upwd1", {
-                    tips: [2, "#000000"],
-                    time: 2000
-                });
-                return;
-            }
-            if (upwd.length < 6 || upwd.length > 10) {
-                layer.tips("请输入6~10位密码!", "#upwd1", {
-                    tips: [2, "#000000"],
-                    time: 2000
-                });
-                return;
-            }
-            if (rupwd.length === 0) {
-                layer.tips("确认密码不能为空!", "#rupwd1", {
-                    tips: [2, "#000000"],
-                    time: 2000
-                });
-                return;
-            }
-            if (upwd !== rupwd) {
-                layer.tips("密码输入不一致!", "#rupwd1", {
-                    tips: [2, "#000000"],
-                    time: 2000
-                });
-                return;
-            }
-            // Get user ID from current address
-            var userId = this.location.search.substr(1).split('=')[1];
-            $.ajax({
-                url:"../user/findUserPwd3.do",
-                method:"post",
-                data: {
-                    newPwd: rupwd,
-                    userId: userId
-                }, // 序列化
-                beforeSend:function(){
-                    index = layer.load(3,{
-                        shade:[0.5,'#000']
-                    });
-                },
-                complete:function(){
-                    layer.close(index);
-                },
-                success:function () {
-                    window.location='findUserPwd4.html'
-                },
-                error:function () {
-                    layer.alert("服务器连接失败"),{icon:6};
-                }
-            });
-        }
-    </script>
+    <title>修改成功</title>
+    <link type="text/css" href="/SSMProject/other/css.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/SSMProject/js/node_modules/layui-src/dist/css/layui.css">
 </head>
 <body>
 <div id="findDiv" class="layui-fluid" style="width:50%" align="center">
@@ -70,35 +12,21 @@
         <div class="for-liucheng">
             <div class="liulist for-cur"></div>
             <div class="liulist for-cur"></div>
-            <div class="liulist"></div>
+            <div class="liulist for-cur"></div>
             <div class="liutextbox">
                 <div class="liutext for-cur"><em>1</em><br /><strong>验证身份</strong></div>
                 <div class="liutext for-cur"><em>2</em><br /><strong>设置新密码</strong></div>
-                <div class="liutext"><em>3</em><br /><strong>完成</strong></div>
+                <div class="liutext for-cur"><em>3</em><br /><strong>完成</strong></div>
             </div>
         </div>
         <!--for-liucheng/-->
-        <form id="verform" action="" class="layui-form">
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
-                    <input id="upwd1" name="upwd" type="password" placeholder="请输入密码" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">确认密码</label>
-                <div class="layui-input-block">
-                    <input id="rupwd1" type="password" placeholder="请输入密码" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item" align="center">
-                <a href="javascript:next()" class="layui-btn layui-btn-fluid" style="width: 45%">下一步</a>
-            </div>
-        </form><!--forget-pwd/-->
+        <div class="successs">
+            <h3>恭喜您，修改成功！</h3>
+        </div><!--forget-pwd/-->
     </div><!--web-width/-->
 </div><!--content/-->
-<script type="text/javascript" src="../js/node_modules/layui-src/dist/layui.all.js"></script>
-<script type="text/javascript" src="../js/node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/SSMProject/js/node_modules/layui-src/dist/layui.all.js"></script>
+<script type="text/javascript" src="/SSMProject/js/node_modules/jquery/dist/jquery.js"></script>
 <script color="0,0,255" pointColor="0,0,255" count="300">
     !
         function() {

@@ -17,13 +17,39 @@ public class DirDAOImpl implements IDirDAO{
     public List<Map> dirAnalysis(String user_id) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.Dir.dirAnalysis";
-        return sqlSession.selectList(sql, user_id);
+        List<Map> objects = sqlSession.selectList(sql, user_id);
+        return objects;
     }
 
     @Override
     public Map findFilePathByDirId(String dir_id) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql="com.isoft.mapping.Dir.findFilePathByDirId";
-        return sqlSession.selectOne(sql,dir_id);
+        Map objects = sqlSession.selectOne(sql,dir_id);
+        return objects;
+    }
+
+    @Override
+    public List<Map> findAllDirByUserId(String user_id) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql="com.isoft.mapping.Dir.findAllDir";
+        List<Map> objects = sqlSession.selectList(sql, user_id);
+        return objects;
+    }
+
+    @Override
+    public int deleteDirByDirId(List<String> strings) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql="com.isoft.mapping.Dir.deleteDirByDirId";
+        int delete = sqlSession.delete(sql, strings);
+        sqlSession.commit(true);
+        return delete;
+    }
+
+    @Override
+    public int addDir(Map<String, Object> obj) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql="com.isoft.mapping.Dir.addDir";
+        return sqlSession.insert(sql, obj);
     }
 }

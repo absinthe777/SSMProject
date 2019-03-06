@@ -24,23 +24,28 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
+    public List<Map<String, Object>> findUserInfo(Map map) {
+        return iAdminDAO.findUserInfo(map);
+    }
+
+    @Override
     public int updateUserPwd(Map map) {
         return iAdminDAO.updateUserPwd(map);
     }
 
     @Override
-    public int deleteUserById(String id) {
-        return iAdminDAO.deleteUserById(id);
+    public int updateUserManager(Map map) {
+        return iAdminDAO.updateUserManager(map);
     }
 
     @Override
-    public int activeAllUser() {
-        return iAdminDAO.activeAllUser();
+    public int deleteUserById(List<String> list) {
+        return iAdminDAO.deleteUserById(list);
     }
 
     @Override
-    public int activeUserById(String id) {
-        return iAdminDAO.activeUserById(id);
+    public int updateUserStatus(Map map) {
+        return iAdminDAO.updateUserStatus(map);
     }
 
     @Override

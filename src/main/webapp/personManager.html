@@ -8,12 +8,12 @@
     <script src="js/node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="js/node_modules/layui-src/dist/layui.all.js"></script>
     <script>
-        function changeUserStatus(status,user_id) {
+        function changeUserStatus(gender,user_id) {
             $.ajax({
-                url: "admin/updateUserStatus.do",
+                url: "admin/updateUserGender.do",
                 method: "post",
                 data: {
-                    "status": status,
+                    "gender": gender,
                     "user_id": user_id
                 },
                 success: function () {
@@ -56,7 +56,7 @@
             getUserFile(1,10);
             layui.table.on("edit(usertable)", function (rs) {
                 $.ajax({
-                    url: "admin/updateUserPwd.do",
+                    url: "admin/updateUserManager.do",
                     method: "get",
                     data: {"obj": JSON.stringify(rs.data)},
                     success: function (data) {
@@ -77,7 +77,7 @@
             layui.use("table", function () {
                 layui.table.render({
                     elem: "#user_manager_table",
-                    url: "admin/findAllUser.do",
+                    url: "admin/findUserInfo.do",
                     title: "用户管理",
                     where: {
                         "user_id": sessionStorage.getItem("user_id"),
@@ -92,26 +92,17 @@
                     cols: [[
                         {field: "user_id", title: "ID", type: "checkbox"},
                         {field: "username", title: "用户名", totalRow: true},
-                        {field: "password", title: "用户密码", edit: "text", totalRow: true},
-                        {field: "email", title: "邮箱", edit: "text", totalRow: true},
+                        {field: "runame", title: "真实姓名", edit: "text", totalRow: true},
+                        {field: "gender", title: "性别", width: 100,edit: "text",totalRow: true},
                         {
-                            field: "register_time", title: "注册时间",
+                            field: "birthday", title: "生日",
                             templet: function (row) {
-                                return new Date(row.register_time).toLocaleString();
+                                return new Date(row.birthday).toLocaleString();
                             }
                         },
-                        {
-                            field: "status", title: "权限", width: 100,
-                            templet: function (row) {
-                                if ((row.status === 1))
-                                    return "<a href='javascript:changeUserStatus(1," + row.user_id + ")'>" +
-                                        "<input name='role'   type='checkbox' lay-skin='switch'   lay-text='会员|非会员' value='1' checked></a>";
-                                else
-                                    return "<a href='javascript:changeUserStatus(0," + row.user_id + ")'>" +
-                                        "<input name='role'  type='checkbox' lay-skin='switch'  lay-text='会员|非会员' value='0'></a>";
-
-                            }
-                        },
+                        {field: "address", title: "地址", edit: "text", totalRow: true},
+                        {field: "telephone", title: "电话", edit: "text", totalRow: true},
+                        {field: "remark", title: "描述", edit: "text", totalRow: true},
                         {
                             filed: "user_id", title: "操作", width: 100,
                             templet: function (row) {

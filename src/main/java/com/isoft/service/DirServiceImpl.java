@@ -28,4 +28,20 @@ public class DirServiceImpl implements IDirService {
         Map filePathByDirId = iDirDAO.findFilePathByDirId(dir_id);
         return filePathByDirId;
     }
+
+    @Override
+    public List<Map> findAllDirByUserId(String user_id) {
+        List<Map> allDirList = iDirDAO.findAllDirByUserId(user_id);
+        return allDirList;
+    }
+
+    @Override
+    public int deleteDirByDirId(List<String> strings) {
+        return iDirDAO.deleteDirByDirId(strings);
+    }
+
+    @Override
+    public int addDir(Map<String, Object> obj) {
+        return iDirDAO.addDir(obj);
+    }
 }

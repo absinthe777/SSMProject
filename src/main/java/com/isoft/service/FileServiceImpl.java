@@ -23,6 +23,11 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
+    public List<Map<String, Object>> findAllFile(Map map) {
+        return fileDAOImpl.findAllFile(map);
+    }
+
+    @Override
     public int updateFileName(Map map) {
         return fileDAOImpl.updateFileName(map);
     }

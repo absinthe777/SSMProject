@@ -5,6 +5,7 @@ import java.util.Map;
 
 public interface IFileDAO {
     List<Map<String, Object>> fileUserFile(Map map);
+    List<Map<String, Object>> findAllFile(Map map);
     int updateFileName(Map map);
     int deleteFileById(List<String> id);
     int updateFileStatus(Map map);

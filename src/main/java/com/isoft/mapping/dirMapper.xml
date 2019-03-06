@@ -5,9 +5,24 @@
 <mapper namespace="com.isoft.mapping.Dir">
     <select id="dirAnalysis" parameterType="string" resultType="map">
       select a.dir_name, b.dir_name as `name`,b.dir_id,b.parent_dir from dir_inf a
-        INNER JOIN dir_inf b on a.dir_id=b.parent_dir
+        INNER JOIN dir_inf b on a.dir_id=b.parent_dir where a.dir_user_id=#{user_id}
     </select>
     <select id="findFilePathByDirId" parameterType="string" resultType="map">
      select concat(dir_path,dir_name) as filepath from dir_inf where dir_id=#{dir_id}
     </select>
+    <select id="findAllDir" parameterType="string" resultType="map">
+    select * from dir_inf where dir_user_id=#{user_id}
+    </select>
+
+    <delete id="deleteDirByDirId" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            delete from dir_inf where FIND_IN_SET(dir_id,getChildList(#{item}))
+        </foreach>
+    </delete>
+
+    <insert id="addDir" parameterType="map">
+    insert into dir_inf(dir_name, parent_dir, dir_user_id, dir_path)
+    values(#{dir_name},#{parent_dir},#{dir_user_id},#{dir_path});
+    </insert>
+
 </mapper>
